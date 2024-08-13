@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[InitializeOnLoad]
-[ExecuteInEditMode]
 public class InputManager : MonoBehaviour
 {
-    public delegate void ClickAction(KeyCode keyCode);
-    public static event ClickAction AddCameraPreset;
+    public delegate void KeyCodeHandler3sec(KeyCode keyCode);
+    public static event KeyCodeHandler3sec KeyCode3sec;
+
+    //Нужно еще одно соыбтие по истечению 3 сек
 
     private void Update()
     {
@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
             if (Input.GetKeyDown(key))
             {
                 Debug.Log($"{key} key was pressed!");
-                AddCameraPreset(key);
+                KeyCode3sec(key);
             }
         }
     }
