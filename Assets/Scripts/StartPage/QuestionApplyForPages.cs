@@ -14,11 +14,11 @@ public class QuestionApplyForPages : MonoBehaviour
         InputManager.KeyCode3sec += ChooseQuestion;
     }
 
-    //private void OnDestroy()
-    //{
-    //    // Отписка от события при уничтожении объекта
-    //    InputManager.KeyCode3sec -= ChooseQuestion;
-    //}
+    private void OnDestroy()
+    {
+        // Отписка от события при уничтожении объекта
+        InputManager.KeyCode3sec -= ChooseQuestion;
+    }
 
     public void ChooseQuestion(KeyCode key)
     {
@@ -33,17 +33,22 @@ public class QuestionApplyForPages : MonoBehaviour
                 // Перебираем страницы и распределяем вопросы
                 for (int i = 0; i < pages.Length; i++)
                 {
-                    Text textComponent = pages[i].GetComponentInChildren<Text>();
-                    if (textComponent != null)
+                    Image imageComponent = pages[i].GetComponentInChildren<Image>();
+                    if (imageComponent != null)
                     {
-                        // Вставляем вопрос в текстовый компонент страницы
-                        textComponent.text = ShuffleQuestions.Instance.shuffledQuestions[i].question;
+                        // Вставляем спрайт в Image компонент страницы
+                        imageComponent.sprite = Sprite.Create(
+                            ShuffleQuestions.Instance.shuffledQuestions[i].question,
+                            new Rect(0, 0, ShuffleQuestions.Instance.shuffledQuestions[i].question.width, ShuffleQuestions.Instance.shuffledQuestions[i].question.height),
+                            new Vector2(0.5f, 0.5f)
+                        );
                     }
                     else
                     {
-                        Debug.LogError($"Page {i} does not have a Text component.");
+                        Debug.LogError($"Page {i} does not have an Image component.");
                     }
                 }
+                // Отписка от события после применения вопросов
                 InputManager.KeyCode3sec -= ChooseQuestion;
             }
             else
@@ -57,8 +62,8 @@ public class QuestionApplyForPages : MonoBehaviour
         }
     }
 
-    public void RemoveQuestion(string questionText)  // Используем string вместо KeyCode
+    public void RemoveQuestion(Texture2D questionTexture)
     {
-        ShuffleQuestions.Instance.RemoveQuestion(questionText);
+        ShuffleQuestions.Instance.RemoveQuestion(questionTexture);
     }
 }

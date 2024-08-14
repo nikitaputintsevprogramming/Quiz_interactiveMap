@@ -7,8 +7,8 @@ namespace Quiz
     [System.Serializable]
     public struct QuestionEntry
     {
-        public string question;  // Используем string вместо KeyCode
-        public KeyCode id;  // Используем KeyCode как идентификатор
+        public Texture2D question;  // Используем Texture2D вместо string
+        public KeyCode id;          // Используем KeyCode как идентификатор
     }
 
     public class ShuffleQuestions : MonoBehaviour
@@ -41,7 +41,7 @@ namespace Quiz
                 // Optionally, you can log the shuffled questions for debugging purposes
                 foreach (var question in shuffledQuestions)
                 {
-                    //Debug.Log($"{question.question}: {question.id}");
+                    Debug.Log($"{question.question.name}: {question.id}");
                 }
             }
             else
@@ -50,7 +50,7 @@ namespace Quiz
             }
         }
 
-        private List<QuestionEntry> ShuffleQuestionsDict(Dictionary<string, KeyCode> originalQuestions)
+        private List<QuestionEntry> ShuffleQuestionsDict(Dictionary<Texture2D, KeyCode> originalQuestions)
         {
             System.Random random = new System.Random();
 
@@ -60,9 +60,9 @@ namespace Quiz
                 .ToList();
         }
 
-        public void RemoveQuestion(string questionText)  // Используем string вместо KeyCode
+        public void RemoveQuestion(Texture2D questionTexture)
         {
-            shuffledQuestions.RemoveAll(q => q.question == questionText);
+            shuffledQuestions.RemoveAll(q => q.question == questionTexture);
         }
     }
 }

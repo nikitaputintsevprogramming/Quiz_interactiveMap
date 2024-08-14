@@ -48,23 +48,23 @@ namespace Quiz
             string currentQuestion = FindObjectOfType<Page>().gameObject.GetComponentInChildren<Text>().text;
             Debug.Log($"Current question: {currentQuestion}");
 
-            if (Questions.Instance.questions.TryGetValue(currentQuestion, out KeyCode correctAnswer))
-            {
-                if (keyCode == correctAnswer)
-                {
-                    Debug.Log("Correct answer!");
-                    OnCorrectAnswer?.Invoke(currentQuestion);
-                }
-                else
-                {
-                    Debug.Log("Incorrect answer!");
-                    OnIncorrectAnswer?.Invoke();
-                }
-            }
-            else
-            {
-                Debug.LogError($"Current question text '{currentQuestion}' does not exist in the questions dictionary.");
-            }
+            //if (Questions.Instance.questions.TryGetValue(currentQuestion, out KeyCode correctAnswer))
+            //{
+            //    if (keyCode == correctAnswer)
+            //    {
+            //        Debug.Log("Correct answer!");
+            //        OnCorrectAnswer?.Invoke(currentQuestion);
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("Incorrect answer!");
+            //        OnIncorrectAnswer?.Invoke();
+            //    }
+            //}
+            //else
+            //{
+            //    Debug.LogError($"Current question text '{currentQuestion}' does not exist in the questions dictionary.");
+            //}
         }
     }
 }
