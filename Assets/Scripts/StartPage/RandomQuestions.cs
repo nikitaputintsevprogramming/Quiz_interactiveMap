@@ -18,7 +18,7 @@ namespace Quiz
         [SerializeField]
         public List<QuestionEntry> shuffledQuestions;
 
-        private void Awake()
+        private void Start()
         {
             if (Instance == null)
             {
@@ -41,7 +41,7 @@ namespace Quiz
                 // Optionally, you can log the shuffled questions for debugging purposes
                 foreach (var question in shuffledQuestions)
                 {
-                    Debug.Log($"{question.id}: {question.question}");
+                    //Debug.Log($"{question.id}: {question.question}");
                 }
             }
             else

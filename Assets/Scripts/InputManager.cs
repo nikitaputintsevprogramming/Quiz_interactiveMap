@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    public static InputManager Instance;
+
     public delegate void KeyCodeHandler3sec(KeyCode keyCode);
     public static event KeyCodeHandler3sec KeyCodeDown;
     public static event KeyCodeHandler3sec KeyCode3sec;
@@ -38,6 +40,7 @@ public class InputManager : MonoBehaviour
                 if (keyPressTimers.ContainsKey(key) && Time.time - keyPressTimers[key] >= 3.0f)
                 {
                     Debug.Log($"{key} key was held for 3 seconds!");
+                    KeyCode3secDowned();
                     KeyCode3sec?.Invoke(key);  // Вызов события после удержания 3 секунд
 
                     // Удаляем ключ из словаря, чтобы избежать повторного вызова
@@ -54,5 +57,10 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool KeyCode3secDowned()
+    {
+        return true;
     }
 }

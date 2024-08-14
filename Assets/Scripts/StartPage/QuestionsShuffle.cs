@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuestionsManager : MonoBehaviour
+public class QuestionsShuffle : MonoBehaviour
 {
     // Массив страниц, которые будут заполнены вопросами
     [SerializeField]
@@ -14,11 +14,11 @@ public class QuestionsManager : MonoBehaviour
         InputManager.KeyCode3sec += ChooseQuestion;
     }
 
-    private void OnDestroy()
-    {
-        // Отписка от события при уничтожении объекта
-        InputManager.KeyCode3sec -= ChooseQuestion;
-    }
+    //private void OnDestroy()
+    //{
+    //    // Отписка от события при уничтожении объекта
+    //    InputManager.KeyCode3sec -= ChooseQuestion;
+    //}
 
     public void ChooseQuestion(KeyCode key)
     {
@@ -44,6 +44,7 @@ public class QuestionsManager : MonoBehaviour
                         Debug.LogError($"Page {i} does not have a Text component.");
                     }
                 }
+                InputManager.KeyCode3sec -= ChooseQuestion;
             }
             else
             {
