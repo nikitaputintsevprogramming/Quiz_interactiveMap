@@ -3,30 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
+using UI.Pagination;
 
-namespace UI.Pagination
+namespace Quiz
 {
     public class PagesManager : MonoBehaviour
     {
+        public delegate void CorrectAnswerHandler(string value);
+        public delegate void IncorrectAnswerHandler();
+
         // События для правильного и неправильного ответа
-        public event System.Action<KeyCode> OnCorrectAnswer;
-        public event System.Action<KeyCode> OnIncorrectAnswer;
+        public event CorrectAnswerHandler OnCorrectAnswer;
+        public event IncorrectAnswerHandler OnIncorrectAnswer;
 
         public void SubcribeOnWaitDownedKey()
         {
-            // Подписываемся на событие удержания клавиши в течение 3 секунд
             InputManager.KeyCode3sec += OnKeyCodeHeldFor3Seconds;
         }
 
         public void UnsubcribeOnWaitDownedKey()
         {
-            // Отписываемся от события, чтобы избежать утечек памяти
             InputManager.KeyCode3sec -= OnKeyCodeHeldFor3Seconds;
         }
 
         // Этот метод будет вызван, когда клавиша удерживается 3 секунды
-        public void OnKeyCodeHeldFor3Seconds(KeyCode keyCode)
+        private void OnKeyCodeHeldFor3Seconds(KeyCode keyCode)
         {
             Debug.Log($"Key {keyCode} was held for 3 seconds in PagesManager");
             FindObjectOfType<PagedRect>().NextPage();
@@ -42,31 +43,27 @@ namespace UI.Pagination
             InputManager.KeyCodeDown -= CheckCorrectKey;
         }
 
-        public void CheckCorrectKey(KeyCode keyCode)
+        private void CheckCorrectKey(KeyCode keyCode)
         {
-            //Debug.Log($"Key {keyCode} was down in PagesManager");
-            //string currentQuestion = gameObject.GetComponentInChildren<Text>().text = keyCode.ToString();
-            //KeyCode correctAnswer = Questions.Instance.questions.TryGetValue(currentQuestionText);
-
             string currentQuestion = FindObjectOfType<Page>().gameObject.GetComponentInChildren<Text>().text;
-            Debug.Log("EEEEEEEEEEEEE currentQuestion" + FindObjectOfType<Page>().gameObject.name);
+            Debug.Log($"Current question: {currentQuestion}");
 
             if (Questions.Instance.questions.TryGetValue(currentQuestion, out KeyCode correctAnswer))
             {
                 if (keyCode == correctAnswer)
                 {
                     Debug.Log("Correct answer!");
-                    OnCorrectAnswer?.Invoke(keyCode);
+                    OnCorrectAnswer?.Invoke(currentQuestion);
                 }
                 else
                 {
                     Debug.Log("Incorrect answer!");
-                    OnIncorrectAnswer?.Invoke(keyCode);
+                    OnIncorrectAnswer?.Invoke();
                 }
             }
             else
             {
-                Debug.LogError("Current question text does not exist in the questions dictionary." + currentQuestion);
+                Debug.LogError($"Current question text '{currentQuestion}' does not exist in the questions dictionary.");
             }
         }
     }
