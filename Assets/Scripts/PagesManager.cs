@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UI.Pagination
 {
-    public class StartPageManager : MonoBehaviour
+    public class PagesManager : MonoBehaviour
     {
         public void SubcribeOnWaitDownedKey()
         {

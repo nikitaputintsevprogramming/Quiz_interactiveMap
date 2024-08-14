@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuestionsShuffle : MonoBehaviour
+public class QuestionApplyForPages : MonoBehaviour
 {
     // Массив страниц, которые будут заполнены вопросами
     [SerializeField]
@@ -22,13 +22,13 @@ public class QuestionsShuffle : MonoBehaviour
 
     public void ChooseQuestion(KeyCode key)
     {
-        if (RandomQuestions.Instance != null)
+        if (ShuffleQuestions.Instance != null)
         {
             // Шафлим вопросы перед распределением
-            RandomQuestions.Instance.ShuffleQuestion();
+            ShuffleQuestions.Instance.ShuffleQuestion();
 
             // Убедимся, что количество вопросов совпадает с количеством страниц
-            if (RandomQuestions.Instance.shuffledQuestions.Count == pages.Length)
+            if (ShuffleQuestions.Instance.shuffledQuestions.Count == pages.Length)
             {
                 // Перебираем страницы и распределяем вопросы
                 for (int i = 0; i < pages.Length; i++)
@@ -37,7 +37,7 @@ public class QuestionsShuffle : MonoBehaviour
                     if (textComponent != null)
                     {
                         // Вставляем вопрос в текстовый компонент страницы
-                        textComponent.text = RandomQuestions.Instance.shuffledQuestions[i].question;
+                        textComponent.text = ShuffleQuestions.Instance.shuffledQuestions[i].question;
                     }
                     else
                     {
@@ -53,12 +53,12 @@ public class QuestionsShuffle : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RandomQuestions instance is not set!");
+            Debug.LogError("ShuffleQuestions instance is not set!");
         }
     }
 
-    public void RemoveQuestion(int questionId)
+    public void RemoveQuestion(string questionText)  // Используем string вместо KeyCode
     {
-        RandomQuestions.Instance.RemoveQuestion(questionId);
+        ShuffleQuestions.Instance.RemoveQuestion(questionText);
     }
 }

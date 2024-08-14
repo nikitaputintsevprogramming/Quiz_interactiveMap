@@ -7,13 +7,13 @@ namespace Quiz
     [System.Serializable]
     public struct QuestionEntry
     {
-        public int id;
-        public string question;
+        public string question;  // Используем string вместо KeyCode
+        public KeyCode id;  // Используем KeyCode как идентификатор
     }
 
-    public class RandomQuestions : MonoBehaviour
+    public class ShuffleQuestions : MonoBehaviour
     {
-        public static RandomQuestions Instance;
+        public static ShuffleQuestions Instance;
 
         [SerializeField]
         public List<QuestionEntry> shuffledQuestions;
@@ -36,12 +36,12 @@ namespace Quiz
 
             if (Questions.Instance != null)
             {
-                shuffledQuestions = ShuffleQuestions(Questions.Instance.questions);
+                shuffledQuestions = ShuffleQuestionsDict(Questions.Instance.questions);
 
                 // Optionally, you can log the shuffled questions for debugging purposes
                 foreach (var question in shuffledQuestions)
                 {
-                    //Debug.Log($"{question.id}: {question.question}");
+                    //Debug.Log($"{question.question}: {question.id}");
                 }
             }
             else
@@ -50,19 +50,19 @@ namespace Quiz
             }
         }
 
-        private List<QuestionEntry> ShuffleQuestions(Dictionary<int, string> originalQuestions)
+        private List<QuestionEntry> ShuffleQuestionsDict(Dictionary<string, KeyCode> originalQuestions)
         {
             System.Random random = new System.Random();
 
             return originalQuestions
                 .OrderBy(x => random.Next())
-                .Select(q => new QuestionEntry { id = q.Key, question = q.Value })
+                .Select(q => new QuestionEntry { question = q.Key, id = q.Value })
                 .ToList();
         }
 
-        public void RemoveQuestion(int questionId)
+        public void RemoveQuestion(string questionText)  // Используем string вместо KeyCode
         {
-            shuffledQuestions.RemoveAll(q => q.id == questionId);
+            shuffledQuestions.RemoveAll(q => q.question == questionText);
         }
     }
 }
