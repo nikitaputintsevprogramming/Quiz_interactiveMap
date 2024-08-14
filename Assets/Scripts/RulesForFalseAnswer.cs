@@ -11,7 +11,7 @@ namespace Assets.Scripts
         [SerializeField]
         private RawImage incorrectAnswerImage; // UI элемент для отображения изображения неправильного ответа
 
-        private bool isImageShowing = false; // Флаг для отслеживания отображения изображения
+        public bool isImageShowing = false; // Флаг для отслеживания отображения изображения
 
         private void Start()
         {
@@ -39,6 +39,9 @@ namespace Assets.Scripts
 
         private void HandleIncorrectAnswer()
         {
+            if (FindObjectOfType<RulesForTrueAnswer>().isVideoPlaying)
+                return;
+
             if (isImageShowing)
             {
                 Debug.Log("Image is currently showing. Ignoring new incorrect answer.");

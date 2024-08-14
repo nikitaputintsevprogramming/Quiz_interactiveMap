@@ -73,6 +73,8 @@ namespace Quiz
                 else
                 {
                     Debug.LogError($"Current texture '{currentTexture.name}' does not exist in the questions dictionary.");
+                    FindObjectOfType<PagedRect>().NextPage();
+
                 }
             }
             else

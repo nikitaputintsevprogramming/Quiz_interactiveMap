@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI; // Для работы с UI элементами
 using UI.Pagination;
+using Assets.Scripts;
 
 namespace Quiz
 {
@@ -21,7 +22,7 @@ namespace Quiz
 
         private Dictionary<string, string> videoClipPaths; // Словарь для хранения путей к видеофайлам
 
-        private bool isVideoPlaying = false; // Флаг для отслеживания состояния воспроизведения видео
+        public bool isVideoPlaying = false; // Флаг для отслеживания состояния воспроизведения видео
 
         private void Start()
         {
@@ -68,6 +69,9 @@ namespace Quiz
 
         private void LoadVideoPathsFromStreamingAssets()
         {
+            if (FindObjectOfType<RulesForFalseAnswer>().isImageShowing)
+                return;
+
             string videosPath = Path.Combine(Application.streamingAssetsPath, "Videos");
 
             if (Directory.Exists(videosPath))
