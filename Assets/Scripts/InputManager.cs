@@ -8,8 +8,9 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance;
 
     public delegate void KeyCodeHandler3sec(KeyCode keyCode);
-    public static event KeyCodeHandler3sec KeyCodeDown;
     public static event KeyCodeHandler3sec KeyCode3sec;
+    public delegate void KeyCodeHandler(KeyCode keyCode);
+    public static event KeyCodeHandler KeyCodeDown;
 
     //Нужно еще одно соыбтие по истечению 3 сек
     private Dictionary<KeyCode, float> keyPressTimers = new Dictionary<KeyCode, float>();
