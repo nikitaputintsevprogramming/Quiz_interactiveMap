@@ -3,14 +3,15 @@ using UnityEngine;
 using UnityEngine.Video;
 using System.IO;
 using System.Collections.Generic;
-using UnityEngine.UI; // Не забудьте подключить этот namespace для использования UI элементов.
+using UnityEngine.UI; // Для работы с UI элементами
+using UI.Pagination;
 
 namespace Quiz
 {
     public class RulesForTrueAnswer : MonoBehaviour
     {
         [SerializeField]
-        private VideoPlayer videoPlayer; // Компонент VideoPlayer, который будет использоваться для воспроизведения видео
+        private VideoPlayer videoPlayer; // Компонент VideoPlayer для воспроизведения видео
 
         [SerializeField]
         private RawImage correctAnswerImage; // UI элемент для отображения изображения правильного ответа
@@ -19,6 +20,8 @@ namespace Quiz
         private RawImage videoImage; // UI элемент для отображения видео
 
         private Dictionary<string, string> videoClipPaths; // Словарь для хранения путей к видеофайлам
+
+        private bool isVideoPlaying = false; // Флаг для отслеживания состояния воспроизведения видео
 
         private void Start()
         {
@@ -50,16 +53,16 @@ namespace Quiz
             }
 
             // Подписка на событие правильного ответа
-            FindObjectOfType<PagesManager>().OnCorrectAnswer += PlayVideoForCorrectAnswer;
+            FindObjectOfType<PagesManager>().OnCorrectAnswer += HandleCorrectAnswer;
         }
 
         private void OnDestroy()
         {
-            // Отписка от события при уничтожении объекта, чтобы избежать утечек памяти
+            // Отписка от события при уничтожении объекта
             PagesManager pagesManager = FindObjectOfType<PagesManager>();
             if (pagesManager != null)
             {
-                pagesManager.OnCorrectAnswer -= PlayVideoForCorrectAnswer;
+                pagesManager.OnCorrectAnswer -= HandleCorrectAnswer;
             }
         }
 
@@ -85,7 +88,7 @@ namespace Quiz
             }
         }
 
-        private void PlayVideoForCorrectAnswer(string textureName)
+        private void HandleCorrectAnswer(string textureName)
         {
             if (string.IsNullOrEmpty(textureName))
             {
@@ -93,10 +96,13 @@ namespace Quiz
                 return;
             }
 
-            Debug.Log($"Looking for video for texture name: {textureName}");
+            if (isVideoPlaying)
+            {
+                Debug.Log("Video is currently playing. Ignoring new correct answer.");
+                return;
+            }
 
-            // Отписка от события, чтобы избежать повторного воспроизведения
-            FindObjectOfType<PagesManager>().OnCorrectAnswer -= PlayVideoForCorrectAnswer;
+            Debug.Log($"Handling correct answer for texture name: {textureName}");
 
             // Показать изображение правильного ответа и затем видео
             StartCoroutine(ShowCorrectAnswerAndPlayVideo(textureName));
@@ -129,9 +135,10 @@ namespace Quiz
             // Скрыть изображение правильного ответа
             correctAnswerImage.gameObject.SetActive(false);
 
-            // Установить RawImage для видео и начать воспроизведение
+            // Запуск видео
             if (videoClipPaths.TryGetValue(textureName, out string videoPath))
             {
+                isVideoPlaying = true; // Установить флаг, что видео воспроизводится
                 videoImage.gameObject.SetActive(true);
                 videoPlayer.gameObject.SetActive(true);
                 videoPlayer.url = videoPath;
@@ -148,9 +155,12 @@ namespace Quiz
         private void OnVideoEnd(VideoPlayer vp)
         {
             Debug.Log("Video has finished playing.");
+            isVideoPlaying = false; // Сбросить флаг после окончания видео
             vp.loopPointReached -= OnVideoEnd; // Отписка от события окончания видео
             videoImage.gameObject.SetActive(false); // Скрыть RawImage для видео
             videoPlayer.gameObject.SetActive(false); // Скрыть VideoPlayer
+            FindObjectOfType<PagedRect>().NextPage();
+
         }
     }
 }
