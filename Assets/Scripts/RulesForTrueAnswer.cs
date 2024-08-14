@@ -1,6 +1,8 @@
 ﻿using UI.Pagination;
 using UnityEngine;
 using UnityEngine.Video;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Quiz
 {
@@ -9,8 +11,7 @@ namespace Quiz
         [SerializeField]
         private VideoPlayer videoPlayer; // Компонент VideoPlayer, который будет использоваться для воспроизведения видео
 
-        [SerializeField]
-        private VideoClip[] videoClips; // Массив видеоклипов, соответствующих вопросам
+        private Dictionary<string, string> videoClipPaths; // Словарь для хранения путей к видеофайлам
 
         private void Start()
         {
@@ -19,9 +20,12 @@ namespace Quiz
                 Debug.LogError("VideoPlayer component is not assigned.");
             }
 
-            if (videoClips.Length == 0)
+            // Загружаем пути к видеоклипам из папки StreamingAssets/Videos
+            LoadVideoPathsFromStreamingAssets();
+
+            if (videoClipPaths.Count == 0)
             {
-                Debug.LogError("VideoClips array is empty.");
+                Debug.LogError("No video clips found in the StreamingAssets/Videos folder.");
             }
 
             // Подписка на событие правильного ответа
@@ -31,42 +35,57 @@ namespace Quiz
         private void OnDestroy()
         {
             // Отписка от события при уничтожении объекта, чтобы избежать утечек памяти
-            if (FindObjectOfType<PagesManager>() != null)
+            PagesManager pagesManager = FindObjectOfType<PagesManager>();
+            if (pagesManager != null)
             {
-                //FindObjectOfType<PagesManager>().OnCorrectAnswer -= PlayVideoForCorrectAnswer;
+                pagesManager.OnCorrectAnswer -= PlayVideoForCorrectAnswer;
             }
         }
 
-        private void PlayVideoForCorrectAnswer(string questionText)
+        private void LoadVideoPathsFromStreamingAssets()
         {
-            // Определите индекс видео, соответствующий тексту вопроса
-            int videoIndex = GetVideoIndexFromQuestionText(questionText);
+            string videosPath = Path.Combine(Application.streamingAssetsPath, "Videos");
 
-            if (videoIndex >= 0 && videoIndex < videoClips.Length)
+            if (Directory.Exists(videosPath))
             {
-                // Устанавливаем видеоклип и начинаем воспроизведение
-                videoPlayer.clip = videoClips[videoIndex];
-                videoPlayer.Play();
-                Debug.Log($"Playing video for question: {questionText}");
+                videoClipPaths = new Dictionary<string, string>();
+
+                string[] videoFiles = Directory.GetFiles(videosPath, "*.mp4");
+
+                foreach (string filePath in videoFiles)
+                {
+                    string videoName = Path.GetFileNameWithoutExtension(filePath);
+                    videoClipPaths.Add(videoName, filePath);
+                }
             }
             else
             {
-                Debug.LogError("No video found for the given question text.");
+                Debug.LogError($"Videos folder not found at path: {videosPath}");
             }
         }
 
-        private int GetVideoIndexFromQuestionText(string questionText)
+        private void PlayVideoForCorrectAnswer(string textureName)
         {
-            // Преобразуйте текст вопроса в индекс видео
-            // Предполагается, что текст вопроса совпадает с названием видео
-            for (int i = 0; i < videoClips.Length; i++)
+            if (string.IsNullOrEmpty(textureName))
             {
-                if (videoClips[i] != null && videoClips[i].name == questionText)
-                {
-                    return i;
-                }
+                Debug.LogError("Texture name is null or empty.");
+                return;
             }
-            return -1; // Возвращает -1, если видео не найдено
+
+            Debug.Log($"Looking for video for texture name: {textureName}");
+
+            if (videoClipPaths.TryGetValue(textureName, out string videoPath))
+            {
+                // Устанавливаем путь к видеоклипу и начинаем воспроизведение
+                videoPlayer.url = videoPath;
+                videoPlayer.Play();
+                Debug.Log($"Playing video for texture: {textureName} from path: {videoPath}");
+            }
+            else
+            {
+                Debug.LogError($"No video found for the given texture name: {textureName}");
+            }
         }
+
     }
 }

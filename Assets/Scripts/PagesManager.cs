@@ -45,26 +45,40 @@ namespace Quiz
 
         private void CheckCorrectKey(KeyCode keyCode)
         {
-            string currentQuestion = FindObjectOfType<Page>().gameObject.GetComponentInChildren<Text>().text;
-            Debug.Log($"Current question: {currentQuestion}");
+            // Получаем текущую страницу
+            Page currentPage = FindObjectOfType<Page>();
 
-            //if (Questions.Instance.questions.TryGetValue(currentQuestion, out KeyCode correctAnswer))
-            //{
-            //    if (keyCode == correctAnswer)
-            //    {
-            //        Debug.Log("Correct answer!");
-            //        OnCorrectAnswer?.Invoke(currentQuestion);
-            //    }
-            //    else
-            //    {
-            //        Debug.Log("Incorrect answer!");
-            //        OnIncorrectAnswer?.Invoke();
-            //    }
-            //}
-            //else
-            //{
-            //    Debug.LogError($"Current question text '{currentQuestion}' does not exist in the questions dictionary.");
-            //}
+            // Получаем Image компонент из текущей страницы
+            Image imageComponent = currentPage.gameObject.GetComponentInChildren<Image>();
+
+            if (imageComponent != null)
+            {
+                // Получаем текстуру из Image компонента
+                Texture2D currentTexture = imageComponent.sprite.texture;
+
+                // Проверяем, существует ли текстура в словаре вопросов
+                if (Questions.Instance.questions.TryGetValue(currentTexture, out KeyCode correctAnswer))
+                {
+                    if (keyCode == correctAnswer)
+                    {
+                        Debug.Log("Correct answer!");
+                        OnCorrectAnswer?.Invoke(currentTexture.name);
+                    }
+                    else
+                    {
+                        Debug.Log("Incorrect answer!");
+                        OnIncorrectAnswer?.Invoke();
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Current texture '{currentTexture.name}' does not exist in the questions dictionary.");
+                }
+            }
+            else
+            {
+                Debug.LogError("No Image component found on the current page.");
+            }
         }
     }
 }

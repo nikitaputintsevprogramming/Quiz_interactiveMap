@@ -43,7 +43,7 @@ namespace Quiz
             }
 
             // Получаем все файлы в папке
-            string[] files = Directory.GetFiles(path, "*.jpg"); // Допустим, все изображения в формате PNG
+            string[] files = Directory.GetFiles(path, "*.jpg"); // Допустим, все изображения в формате JPG
 
             // Загружаем каждую текстуру и добавляем в словарь
             foreach (string file in files)
@@ -54,12 +54,17 @@ namespace Quiz
                 Texture2D texture = new Texture2D(2, 2); // Создаем временную текстуру
                 if (texture.LoadImage(fileData)) // Загружаем изображение в текстуру
                 {
+                    // Установить имя текстуры на основе имени файла
+                    texture.name = Path.GetFileNameWithoutExtension(file);
+
+                    print(texture.name);
                     // Получаем KeyCode из имени файла (например, "question1.png" -> KeyCode.Keypad1)
-                    KeyCode keyCode = GetKeyCodeFromFileName(Path.GetFileNameWithoutExtension(file));
+                    KeyCode keyCode = GetKeyCodeFromFileName(texture.name);
                     if (keyCode != KeyCode.None)
                     {
                         questions.Add(texture, keyCode);
                         ListOfTexturesStreamAssets.Add(texture); // для отслеживания в инспекторе
+                        print(texture.format);
                     }
                     else
                     {
@@ -72,6 +77,7 @@ namespace Quiz
                 }
             }
         }
+
 
         private KeyCode GetKeyCodeFromFileName(string fileName)
         {
