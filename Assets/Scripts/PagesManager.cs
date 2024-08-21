@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UI.Pagination;
+using UnityEngine.SceneManagement;
 
 namespace Quiz
 {
@@ -80,6 +81,7 @@ namespace Quiz
             else
             {
                 Debug.LogError("No Image component found on the current page.");
+                //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }
