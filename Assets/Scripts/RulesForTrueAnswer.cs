@@ -22,6 +22,8 @@ namespace Quiz
 
         private Dictionary<string, string> videoClipPaths; // Словарь для хранения путей к видеофайлам
 
+        public bool isImageTrueShowing = false; // Флаг для отслеживания отображения изображения
+
         public bool isVideoPlaying = false; // Флаг для отслеживания состояния воспроизведения видео
 
         private void Start()
@@ -69,7 +71,7 @@ namespace Quiz
 
         private void LoadVideoPathsFromStreamingAssets()
         {
-            if (FindObjectOfType<RulesForFalseAnswer>().isImageShowing)
+            if (FindObjectOfType<RulesForFalseAnswer>().isImageFalseShowing)
                 return;
 
             string videosPath = Path.Combine(Application.streamingAssetsPath, "Videos");
@@ -94,6 +96,9 @@ namespace Quiz
 
         private void HandleCorrectAnswer(string textureName)
         {
+            if(FindObjectOfType<RulesForFalseAnswer>().isImageFalseShowing) 
+                return;
+
             if (string.IsNullOrEmpty(textureName))
             {
                 Debug.LogError("Texture name is null or empty.");
@@ -119,6 +124,7 @@ namespace Quiz
 
             if (File.Exists(correctAnswerImagePath))
             {
+                isImageTrueShowing = true;
                 // Загрузить текстуру для изображения
                 byte[] imageData = File.ReadAllBytes(correctAnswerImagePath);
                 Texture2D texture = new Texture2D(2, 2);
@@ -130,6 +136,8 @@ namespace Quiz
 
                 // Подождать 3 секунды
                 yield return new WaitForSeconds(3f);
+                isImageTrueShowing = false;
+
             }
             else
             {

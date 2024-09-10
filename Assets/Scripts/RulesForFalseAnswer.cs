@@ -11,7 +11,7 @@ namespace Assets.Scripts
         [SerializeField]
         private RawImage incorrectAnswerImage; // UI элемент для отображения изображения неправильного ответа
 
-        public bool isImageShowing = false; // Флаг для отслеживания отображения изображения
+        public bool isImageFalseShowing = false; // Флаг для отслеживания отображения изображения
 
         private void Start()
         {
@@ -39,10 +39,13 @@ namespace Assets.Scripts
 
         private void HandleIncorrectAnswer()
         {
+            if (FindObjectOfType<RulesForTrueAnswer>().isImageTrueShowing)
+                return;
+
             if (FindObjectOfType<RulesForTrueAnswer>().isVideoPlaying)
                 return;
 
-            if (isImageShowing)
+            if (isImageFalseShowing)
             {
                 Debug.Log("Image is currently showing. Ignoring new incorrect answer.");
                 return;
@@ -71,7 +74,7 @@ namespace Assets.Scripts
                 incorrectAnswerImage.gameObject.SetActive(true);
 
                 // Установить флаг, что изображение показывается
-                isImageShowing = true;
+                isImageFalseShowing = true;
 
                 // Подождать 3 секунды
                 yield return new WaitForSeconds(3f);
@@ -80,7 +83,7 @@ namespace Assets.Scripts
                 incorrectAnswerImage.gameObject.SetActive(false);
 
                 // Сбросить флаг после скрытия изображения
-                isImageShowing = false;
+                isImageFalseShowing = false;
             }
             else
             {
