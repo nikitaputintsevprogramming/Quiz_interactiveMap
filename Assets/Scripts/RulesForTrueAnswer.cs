@@ -125,6 +125,8 @@ namespace Quiz
             if (File.Exists(correctAnswerImagePath))
             {
                 isImageTrueShowing = true;
+                FindObjectOfType<ArduinoController>().SendSignal("0");
+                Debug.Log("SendSignal (0)");
                 // Загрузить текстуру для изображения
                 byte[] imageData = File.ReadAllBytes(correctAnswerImagePath);
                 Texture2D texture = new Texture2D(2, 2);
