@@ -79,7 +79,7 @@ namespace Quiz
         }
 
 
-        private KeyCode GetKeyCodeFromFileName(string fileName)
+        public KeyCode GetKeyCodeFromFileName(string fileName)
         {
             // Преобразование имени файла в KeyCode. Этот метод должен быть настроен в зависимости от вашей логики.
             // Примерная реализация:

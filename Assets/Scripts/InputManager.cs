@@ -42,6 +42,7 @@ public class InputManager : MonoBehaviour
                 {
                     Debug.Log($"{key} key was held for 3 seconds!");
                     KeyCode3secDowned();
+
                     KeyCode3sec?.Invoke(key);  // Вызов события после удержания 3 секунд
 
                     // Удаляем ключ из словаря, чтобы избежать повторного вызова

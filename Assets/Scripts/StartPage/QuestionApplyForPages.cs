@@ -1,6 +1,7 @@
 ﻿using Quiz;
 using UnityEngine;
 using UnityEngine.UI;
+using static TreeEditor.TextureAtlas;
 
 public class QuestionApplyForPages : MonoBehaviour
 {
@@ -36,13 +37,22 @@ public class QuestionApplyForPages : MonoBehaviour
                     Image imageComponent = pages[i].GetComponentInChildren<Image>();
                     if (imageComponent != null)
                     {
+                        string textureName = ShuffleQuestions.Instance.shuffledQuestions[i].question.name;
                         // Вставляем спрайт в Image компонент страницы
                         imageComponent.sprite = Sprite.Create(
                             ShuffleQuestions.Instance.shuffledQuestions[i].question,
                             new Rect(0, 0, ShuffleQuestions.Instance.shuffledQuestions[i].question.width, ShuffleQuestions.Instance.shuffledQuestions[i].question.height),
                             new Vector2(0.5f, 0.5f)
                         );
+
+                        imageComponent.sprite.name = textureName;
                     }
+                    //Text textObj = pages[i].GetComponentInChildren<Text>();
+                    //if (textObj != null)
+                    //{
+                    //    textObj.text = ShuffleQuestions.Instance.shuffledQuestions[i].question.GetInstanceID().ToString();
+                    //    //Questions.Instance.questions.TryGetValue(currentTexture, out KeyCode correctAnswer)
+                    //}
                     else
                     {
                         Debug.LogError($"Page {i} does not have an Image component.");

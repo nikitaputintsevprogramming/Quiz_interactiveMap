@@ -4,7 +4,6 @@ using UnityEngine.Video;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI; // Для работы с UI элементами
-using UI.Pagination;
 using Assets.Scripts;
 
 namespace Quiz
