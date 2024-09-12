@@ -1,7 +1,6 @@
 ﻿using Quiz;
 using UnityEngine;
 using UnityEngine.UI;
-using static TreeEditor.TextureAtlas;
 
 public class QuestionApplyForPages : MonoBehaviour
 {
