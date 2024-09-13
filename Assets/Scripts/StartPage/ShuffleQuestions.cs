@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UI.Pagination;
 
 namespace Quiz
 {
@@ -32,6 +33,11 @@ namespace Quiz
 
         public void ShuffleQuestion()
         {
+            if(FindObjectOfType<PagedRect>().CurrentPage != 1)
+            {
+                return;
+            }
+
             Debug.Log("Shuffling Questions...");
 
             if (Questions.Instance != null)
