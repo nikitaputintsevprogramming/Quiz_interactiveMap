@@ -11,13 +11,13 @@ public class QuestionApplyForPages : MonoBehaviour
     private void Awake()
     {
         // Подписка на событие KeyCode3sec
-        InputManager.KeyCode3sec += ChooseQuestion;
+        InputManager.KeyCodeDown += ChooseQuestion;
     }
 
     private void OnDestroy()
     {
         // Отписка от события при уничтожении объекта
-        InputManager.KeyCode3sec -= ChooseQuestion;
+        InputManager.KeyCodeDown -= ChooseQuestion;
     }
 
     public void ChooseQuestion(KeyCode key)

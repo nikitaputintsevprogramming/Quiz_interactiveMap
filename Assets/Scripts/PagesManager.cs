@@ -17,6 +17,16 @@ namespace Quiz
         public event CorrectAnswerHandler OnCorrectAnswer;
         public event IncorrectAnswerHandler OnIncorrectAnswer;
 
+        public void SubcribeDownedKey()
+        {
+            InputManager.KeyCodeDown += OnKeyCodeHeldFor3Seconds;
+        }
+
+        public void UnsubcribeDownedKey()
+        {
+            InputManager.KeyCodeDown -= OnKeyCodeHeldFor3Seconds;
+        }
+
         public void SubcribeOnWaitDownedKey()
         {
             InputManager.KeyCode3sec += OnKeyCodeHeldFor3Seconds;
