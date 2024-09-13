@@ -5,6 +5,9 @@ namespace Quiz
 {
     public class COMFromJSON : MonoBehaviour
     {
+        //public delegate void ComLoaded();
+        //public static event ComLoaded e_ComLoaded;
+
         // Переменная для хранения числа
         public int COM_number;
 
@@ -15,7 +18,7 @@ namespace Quiz
             public int COM;  // Название ключа в JSON
         }
 
-        void Start()
+        void OnEnable()
         {
             LoadCOMFromJSON();
         }
@@ -31,6 +34,7 @@ namespace Quiz
                 COMData data = JsonUtility.FromJson<COMData>(jsonContent);
                 COM_number = data.COM;
                 Debug.Log("Значение COM: " + COM_number);
+                //e_ComLoaded();
             }
             else
             {

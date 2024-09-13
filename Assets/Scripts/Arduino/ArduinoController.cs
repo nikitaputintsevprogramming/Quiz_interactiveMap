@@ -1,4 +1,3 @@
-using Quiz;
 using System.IO.Ports;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,10 +18,16 @@ namespace Quiz
         {
             string com_number = FindObjectOfType<COMFromJSON>().COM_number.ToString();
             serialPort = new SerialPort("COM"+ com_number, 9600);  // �������� "COM3" �� ��������������� COM-���� ������ Arduino
+            print("COM" + com_number + "!!!!!!!!!!!!!!!!!!!!!!!!");
             // �������� ����������������� �����
             serialPort.Open();
             serialPort.ReadTimeout = 50;
         }
+
+        //private void InitializeCom()
+        //{
+
+        //}
 
         //void Update()
         //{
