@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI; // Для работы с UI элементами
 using Assets.Scripts;
+using System.Collections;
 
 namespace Quiz
 {
@@ -139,15 +140,11 @@ namespace Quiz
 
                 // Подождать 3 секунды
                 yield return new WaitForSeconds(3f);
-                isImageTrueShowing = false;
-
             }
             else
             {
                 Debug.LogError($"Correct answer image not found at path: {correctAnswerImagePath}");
             }
-
-            
 
             // Запуск видео
             if (videoClipPaths.TryGetValue(textureName, out string videoPath))
@@ -168,13 +165,37 @@ namespace Quiz
 
         private void PlayVideo(VideoPlayer vp)
         {
-            //CanvasForHideOnVideoStep.SetActive(false);
+            // Активируем RawImage для видео
             videoImage.gameObject.SetActive(true);
-            isVideoPlaying = true; // Установить флаг, что видео воспроизводится
             videoPlayer.gameObject.SetActive(true);
-            // Скрыть изображение правильного ответа
-            correctAnswerImage.gameObject.SetActive(false);
+
+            // Запускаем воспроизведение видео
             videoPlayer.Play();
+            // Подписываемся на событие появления первого кадра
+            videoPlayer.started += OnFirstFrameReady;
+            isVideoPlaying = true; // Устанавливаем флаг, что видео воспроизводится
+        }
+
+        // Метод, который будет вызван при первом готовом кадре видео
+        private void OnFirstFrameReady(VideoPlayer source)
+        {
+            // Запускаем корутину, чтобы подождать 1 секунду перед отключением изображения
+            StartCoroutine(DisableCorrectAnswerImageAfterDelay());
+
+            Debug.Log("Video is prepared and ready to play");
+
+            // Отписываемся от события, чтобы сработало только один раз
+            videoPlayer.started -= OnFirstFrameReady;
+        }
+
+        private IEnumerator<WaitForSeconds> DisableCorrectAnswerImageAfterDelay()
+        {
+            // Ждем 1 секунду
+            yield return new WaitForSeconds(0.3f);
+
+            // Отключаем изображение правильного ответа
+            correctAnswerImage.gameObject.SetActive(false);
+            isImageTrueShowing = false;
         }
 
         private void OnVideoEnd(VideoPlayer vp)
