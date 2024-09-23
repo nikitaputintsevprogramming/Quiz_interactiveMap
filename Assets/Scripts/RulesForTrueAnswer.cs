@@ -10,6 +10,8 @@ namespace Quiz
 {
     public class RulesForTrueAnswer : MonoBehaviour
     {
+        //[SerializeField] private GameObject CanvasForHideOnVideoStep; //25 kadr
+
         [SerializeField]
         private VideoPlayer videoPlayer; // Компонент VideoPlayer для воспроизведения видео
 
@@ -145,17 +147,16 @@ namespace Quiz
                 Debug.LogError($"Correct answer image not found at path: {correctAnswerImagePath}");
             }
 
-            // Скрыть изображение правильного ответа
-            correctAnswerImage.gameObject.SetActive(false);
+            
 
             // Запуск видео
             if (videoClipPaths.TryGetValue(textureName, out string videoPath))
             {
-                isVideoPlaying = true; // Установить флаг, что видео воспроизводится
-                videoImage.gameObject.SetActive(true);
-                videoPlayer.gameObject.SetActive(true);
+                videoPlayer.gameObject.SetActive(true); // Убедитесь, что VideoPlayer активен
                 videoPlayer.url = videoPath;
-                videoPlayer.Play();
+                videoPlayer.Prepare();
+                videoPlayer.prepareCompleted += PlayVideo;
+
                 videoPlayer.loopPointReached += OnVideoEnd; // Подписка на событие окончания видео
                 Debug.Log($"Playing video for texture: {textureName} from path: {videoPath}");
             }
@@ -165,15 +166,30 @@ namespace Quiz
             }
         }
 
+        private void PlayVideo(VideoPlayer vp)
+        {
+            //CanvasForHideOnVideoStep.SetActive(false);
+            videoImage.gameObject.SetActive(true);
+            isVideoPlaying = true; // Установить флаг, что видео воспроизводится
+            videoPlayer.gameObject.SetActive(true);
+            // Скрыть изображение правильного ответа
+            correctAnswerImage.gameObject.SetActive(false);
+            videoPlayer.Play();
+        }
+
         private void OnVideoEnd(VideoPlayer vp)
         {
+            FindObjectOfType<PagedRect>(true).NextPage();
+            //CanvasForHideOnVideoStep.SetActive(true);
+
             Debug.Log("Video has finished playing.");
             isVideoPlaying = false; // Сбросить флаг после окончания видео
             vp.loopPointReached -= OnVideoEnd; // Отписка от события окончания видео
             videoImage.gameObject.SetActive(false); // Скрыть RawImage для видео
             videoPlayer.gameObject.SetActive(false); // Скрыть VideoPlayer
-            FindObjectOfType<PagedRect>().NextPage();
 
+            vp.loopPointReached -= OnVideoEnd; // Отписка от события окончания видео
+            videoPlayer.prepareCompleted -= PlayVideo;
         }
     }
 }

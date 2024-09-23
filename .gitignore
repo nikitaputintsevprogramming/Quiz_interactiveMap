@@ -73,3 +73,7 @@ crashlytics-build.properties
 *.zip
 *.mp4
 *.mp4
+*.mp4
+*.mp4
+Assets/StreamingAssets/STA.mp4
+/Assets/StreamingAssets

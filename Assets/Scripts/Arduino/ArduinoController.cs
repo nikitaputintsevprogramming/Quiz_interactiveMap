@@ -46,7 +46,7 @@ namespace Quiz
         //много много проверок (глаза боятся - руки делают)
         public void SubmitKeyCode()
         {
-            pagedRect = FindObjectOfType<PagedRect>();
+            pagedRect = FindObjectOfType<PagedRect>(true);
             //currentPage = pagedRect.GetComponentInChildren<Page>(false);
             currentPage = pagedRect.transform.GetChild(0).GetChild(pagedRect.CurrentPage-1).GetComponent<Page>();
             if (currentPage == null)
