@@ -6,6 +6,6 @@ public class ResolutionSpeed : MonoBehaviour
 {
     void Start()
     {
-        Screen.SetResolution(1024, 768, FullScreenMode.FullScreenWindow);
+        Screen.SetResolution(2160, 3840, FullScreenMode.FullScreenWindow);
     }
 }
