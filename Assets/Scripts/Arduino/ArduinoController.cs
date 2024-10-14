@@ -11,14 +11,18 @@ namespace Quiz
     {
         SerialPort serialPort;
 
-        [SerializeField] private PagedRect pagedRect;
-        [SerializeField] private Page currentPage;
+        private PagedRect pagedRect;
+        private Page currentPage;
+
+        [SerializeField] private Canvas CanvasVideoQuestion;
+        [SerializeField] private Canvas CanvasAnswers;
+        [SerializeField] private Canvas CanvasPages;
 
         void Start()
         {
             string com_number = FindObjectOfType<COMFromJSON>().COM_number.ToString();
             serialPort = new SerialPort("COM"+ com_number, 9600);  // �������� "COM3" �� ��������������� COM-���� ������ Arduino
-            print("COM" + com_number + "!!!!!!!!!!!!!!!!!!!!!!!!");
+            //print("COM" + com_number);
             // �������� ����������������� �����
             serialPort.Open();
             serialPort.ReadTimeout = 50;
@@ -56,6 +60,9 @@ namespace Quiz
             else
             {
                 Debug.Log("Page component found successfully.");
+                CanvasPages.sortingOrder = 1;
+                CanvasAnswers.sortingOrder = 0;
+                CanvasVideoQuestion.sortingOrder = 0;
             }
             //PagedRect currentPage = FindObjectOfType<PagedRect>();
 
@@ -79,7 +86,7 @@ namespace Quiz
             }
             else
             {
-                Debug.Log("найден спрайт: " + sprite.name);
+                //Debug.Log("найден спрайт: " + sprite.name);
             }
 
             //// Получаем текстуру из спрайта
@@ -104,19 +111,19 @@ namespace Quiz
             // Пытаемся получить правильный ответ из словаря
             //Questions.Instance.questions.TryGetValue(currentTexture, out KeyCode correctAnswer);
             KeyCode correctAnswer = Questions.Instance.GetKeyCodeFromFileName(currentTexture);
-            Debug.Log(correctAnswer + " ++++++++==");
+            //Debug.Log(correctAnswer);
             // Выводим корректный ответ, если он найден
             if (correctAnswer == KeyCode.None)
             {
-                Debug.LogWarning("Correct answer not found for the given texture");
+                //Debug.LogWarning("Correct answer not found for the given texture");
             }
             else
             {
-                Debug.Log("Correct answer: " + correctAnswer.ToString() + "--------------------------");
+                //Debug.Log("Correct answer: " + correctAnswer.ToString());
             }
             string CorrectAnswer = correctAnswer.ToString();
             string digitsOnly = new string(CorrectAnswer.Where(char.IsDigit).ToArray());
-            Debug.Log(digitsOnly);
+            //Debug.Log(digitsOnly);
             SendSignal(digitsOnly);
         }
 

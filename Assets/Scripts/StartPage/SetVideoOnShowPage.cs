@@ -6,8 +6,10 @@ using UI.Pagination;
 
 public class SetVideoOnShowPage : MonoBehaviour
 {
+
     public void SetVideoToFirstPage(string video)
     {
+
         // Path to the video file in the StreamingAssets folder
         string videoPath = Path.Combine(Application.streamingAssetsPath, video);
 

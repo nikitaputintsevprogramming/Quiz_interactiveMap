@@ -47,7 +47,7 @@ namespace Quiz
                 // Optionally, you can log the shuffled questions for debugging purposes
                 foreach (var question in shuffledQuestions)
                 {
-                    Debug.Log($"{question.question.name}: {question.id}");
+                    //Debug.Log($"{question.question.name}: {question.id}");
                 }
             }
             else

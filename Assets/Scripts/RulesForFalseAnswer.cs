@@ -8,6 +8,10 @@ namespace Assets.Scripts
 {
     public class RulesForFalseAnswer : MonoBehaviour
     {
+        [SerializeField] private Canvas CanvasVideoQuestion;
+        [SerializeField] private Canvas CanvasAnswers;
+        [SerializeField] private Canvas CanvasPages;
+
         [SerializeField]
         private RawImage incorrectAnswerImage; // UI элемент для отображения изображения неправильного ответа
 
@@ -59,6 +63,10 @@ namespace Assets.Scripts
 
         private IEnumerator ShowIncorrectAnswer()
         {
+            CanvasPages.sortingOrder = 0;
+            CanvasAnswers.sortingOrder = 1;
+            CanvasVideoQuestion.sortingOrder = 0;
+
             // Показать изображение неправильного ответа
             string incorrectAnswerImagePath = Path.Combine(Application.streamingAssetsPath, "incorrect_answer.jpg");
 
@@ -84,6 +92,10 @@ namespace Assets.Scripts
 
                 // Сбросить флаг после скрытия изображения
                 isImageFalseShowing = false;
+
+                CanvasPages.sortingOrder = 1;
+                CanvasAnswers.sortingOrder = 0;
+                CanvasVideoQuestion.sortingOrder = 0;
             }
             else
             {

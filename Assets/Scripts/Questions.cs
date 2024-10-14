@@ -48,7 +48,7 @@ namespace Quiz
             // Загружаем каждую текстуру и добавляем в словарь
             foreach (string file in files)
             {
-                print(file);
+                //print(file);
                 // Загрузить текстуру из файла
                 byte[] fileData = File.ReadAllBytes(file);
                 Texture2D texture = new Texture2D(2, 2); // Создаем временную текстуру
@@ -57,14 +57,14 @@ namespace Quiz
                     // Установить имя текстуры на основе имени файла
                     texture.name = Path.GetFileNameWithoutExtension(file);
 
-                    print(texture.name);
+                    //print(texture.name);
                     // Получаем KeyCode из имени файла (например, "question1.png" -> KeyCode.Keypad1)
                     KeyCode keyCode = GetKeyCodeFromFileName(texture.name);
                     if (keyCode != KeyCode.None)
                     {
                         questions.Add(texture, keyCode);
                         ListOfTexturesStreamAssets.Add(texture); // для отслеживания в инспекторе
-                        print(texture.format);
+                        //print(texture.format);
                     }
                     else
                     {

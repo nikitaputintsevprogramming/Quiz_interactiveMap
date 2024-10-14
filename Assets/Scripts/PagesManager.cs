@@ -10,6 +10,8 @@ namespace Quiz
 {
     public class PagesManager : MonoBehaviour
     {
+
+
         public delegate void CorrectAnswerHandler(string value);
         public delegate void IncorrectAnswerHandler();
 
@@ -72,11 +74,13 @@ namespace Quiz
                 {
                     if (keyCode == correctAnswer)
                     {
+                        
                         Debug.Log("Correct answer!");
                         OnCorrectAnswer?.Invoke(currentTexture.name);
                     }
                     else
                     {
+                        
                         Debug.Log("Incorrect answer!");
                         OnIncorrectAnswer?.Invoke();
                     }

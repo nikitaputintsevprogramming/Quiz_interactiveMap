@@ -33,7 +33,7 @@ namespace Quiz
                 string jsonContent = File.ReadAllText(filePath);
                 COMData data = JsonUtility.FromJson<COMData>(jsonContent);
                 COM_number = data.COM;
-                Debug.Log("Значение COM: " + COM_number);
+                //Debug.Log("Значение COM: " + COM_number);
                 //e_ComLoaded();
             }
             else

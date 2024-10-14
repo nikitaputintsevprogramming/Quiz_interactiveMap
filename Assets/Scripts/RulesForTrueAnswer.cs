@@ -11,6 +11,10 @@ namespace Quiz
 {
     public class RulesForTrueAnswer : MonoBehaviour
     {
+        [SerializeField] private Canvas CanvasVideoQuestion;
+        [SerializeField] private Canvas CanvasAnswers;
+        [SerializeField] private Canvas CanvasPages;
+
         //[SerializeField] private GameObject CanvasForHideOnVideoStep; //25 kadr
 
         [SerializeField]
@@ -121,14 +125,19 @@ namespace Quiz
 
         private IEnumerator<WaitForSeconds> ShowCorrectAnswerAndPlayVideo(string textureName)
         {
+
+            
             // Показать изображение правильного ответа
             string correctAnswerImagePath = Path.Combine(Application.streamingAssetsPath, "correct_answer.jpg");
 
             if (File.Exists(correctAnswerImagePath))
             {
+                CanvasAnswers.sortingOrder = 1;
+                CanvasPages.sortingOrder = 0;
+                CanvasVideoQuestion.sortingOrder = 0;
+
                 isImageTrueShowing = true;
                 FindObjectOfType<ArduinoController>().SendSignal("0");
-                Debug.Log("SendSignal (0)");
                 // Загрузить текстуру для изображения
                 byte[] imageData = File.ReadAllBytes(correctAnswerImagePath);
                 Texture2D texture = new Texture2D(2, 2);
@@ -138,8 +147,12 @@ namespace Quiz
                 correctAnswerImage.texture = texture;
                 correctAnswerImage.gameObject.SetActive(true);
 
+                
+
                 // Подождать 3 секунды
                 yield return new WaitForSeconds(3f);
+
+
             }
             else
             {
@@ -179,6 +192,8 @@ namespace Quiz
         // Метод, который будет вызван при первом готовом кадре видео
         private void OnFirstFrameReady(VideoPlayer source)
         {
+            
+
             // Запускаем корутину, чтобы подождать 1 секунду перед отключением изображения
             StartCoroutine(DisableCorrectAnswerImageAfterDelay());
 
@@ -196,6 +211,10 @@ namespace Quiz
             // Отключаем изображение правильного ответа
             correctAnswerImage.gameObject.SetActive(false);
             isImageTrueShowing = false;
+
+            CanvasPages.sortingOrder = 0;
+            CanvasAnswers.sortingOrder = 0;
+            CanvasVideoQuestion.sortingOrder = 1;
         }
 
         private void OnVideoEnd(VideoPlayer vp)
@@ -211,6 +230,11 @@ namespace Quiz
 
             vp.loopPointReached -= OnVideoEnd; // Отписка от события окончания видео
             videoPlayer.prepareCompleted -= PlayVideo;
+
+            CanvasPages.sortingOrder = 1;
+            CanvasAnswers.sortingOrder = 0;
+            CanvasVideoQuestion.sortingOrder = 0;
+
         }
     }
 }

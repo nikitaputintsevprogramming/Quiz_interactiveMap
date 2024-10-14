@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
             // Проверяем, если клавиша нажата
             if (Input.GetKeyDown(key))
             {
-                Debug.Log($"{key} key was pressed!");
+                //Debug.Log($"{key} key was pressed!");
                 KeyCodeDown?.Invoke(key);  // Вызов события нажатия клавиши
 
                 // Запускаем таймер для этой клавиши
